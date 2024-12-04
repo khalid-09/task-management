@@ -53,7 +53,7 @@ const Task = ({ cardTitle, tasks }: TaskProps) => {
               >
                 {task.priority}
               </Badge>
-              <TaskAction id={task.id} />
+              <TaskAction task={task} />
             </div>
             <div className="space-y-1">
               <h3 className="text-lg font-semibold">{task.title}</h3>
@@ -64,12 +64,22 @@ const Task = ({ cardTitle, tasks }: TaskProps) => {
           <div className="p-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Calendar size={16} />
-              <p className="text-sm">
-                Due on :{' '}
-                <span className="font-semibold">
-                  {format(new Date(task.dueDate), 'dd MMM')}
-                </span>
-              </p>
+              {cardTitle !== 'Done' && (
+                <p className="text-sm">
+                  Due on :{' '}
+                  <span className="font-semibold">
+                    {format(new Date(task.dueDate), 'dd MMM')}
+                  </span>
+                </p>
+              )}
+              {cardTitle === 'Done' && (
+                <p className="text-sm">
+                  Completed on :{' '}
+                  <span className="font-semibold">
+                    {format(new Date(task.dueDate), 'dd MMM')}
+                  </span>
+                </p>
+              )}
             </div>
           </div>
         </Card>

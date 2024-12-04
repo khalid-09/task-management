@@ -16,9 +16,18 @@ import {
 } from 'lucide-react';
 import DeleteBoxDialog from './delete-box-dialog';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store';
+import { markComplete, Task } from '@/store/taskSlice';
 
-const TaskAction = ({ id }: { id: string }) => {
+interface TaskActionProps {
+  task: Task;
+}
+
+const TaskAction = ({ task: { id, status } }: TaskActionProps) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  const dispatch = useDispatch<AppDispatch>();
 
   return (
     <>
@@ -34,17 +43,18 @@ const TaskAction = ({ id }: { id: string }) => {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <Button variant="ghost" size="sm">
+            {status !== 'done' && (
+              <DropdownMenuItem
+                className="flex cursor-pointer  items-center gap-3"
+                onClick={() => dispatch(markComplete(id))}
+              >
                 <CheckCircle2 />
                 Mark as Complete
-              </Button>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Button variant="ghost" size="sm">
-                <PenIcon />
-                Edit
-              </Button>
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuItem className="flex cursor-pointer  items-center gap-3">
+              <PenIcon />
+              Edit
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
