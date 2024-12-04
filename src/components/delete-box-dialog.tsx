@@ -11,6 +11,7 @@ import { AppDispatch } from '@/store';
 import { deleteTask } from '@/store/taskSlice';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { useDispatch } from 'react-redux';
+import { toast } from 'sonner';
 
 interface DeleteTaskDialogProps {
   id: string;
@@ -26,6 +27,11 @@ const DeleteTaskDialog = ({ id, open, onClose }: DeleteTaskDialogProps) => {
     onClose();
   };
 
+  const handleDelete = () => {
+    dispatch(deleteTask(id));
+    toast('Task deleted successfully! 🗑️');
+  };
+
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
@@ -39,7 +45,7 @@ const DeleteTaskDialog = ({ id, open, onClose }: DeleteTaskDialogProps) => {
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button type="submit" onClick={() => dispatch(deleteTask(id))}>
+          <Button type="submit" onClick={handleDelete}>
             Delete
           </Button>
         </DialogFooter>

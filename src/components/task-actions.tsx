@@ -19,15 +19,20 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store';
 import { markComplete, Task } from '@/store/taskSlice';
+import { toast } from 'sonner';
 
 interface TaskActionProps {
   task: Task;
 }
 
 const TaskAction = ({ task: { id, status } }: TaskActionProps) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-  const dispatch = useDispatch<AppDispatch>();
+  const handleMarkComplete = () => {
+    dispatch(markComplete(id));
+    toast('Task marked as complete! ✅');
+  };
 
   return (
     <>
@@ -44,7 +49,7 @@ const TaskAction = ({ task: { id, status } }: TaskActionProps) => {
             {status !== 'done' && (
               <DropdownMenuItem
                 className="flex cursor-pointer  items-center gap-3"
-                onClick={() => dispatch(markComplete(id))}
+                onClick={handleMarkComplete}
               >
                 <CheckCircle2 className="size-4" />
                 Mark as Complete

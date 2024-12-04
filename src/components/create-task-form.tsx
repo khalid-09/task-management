@@ -31,6 +31,7 @@ import { Textarea } from './ui/textarea';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store';
 import { addTask } from '@/store/taskSlice';
+import { toast } from 'sonner';
 
 const CreateTaskForm = () => {
   const form = useForm<CreateTask>({
@@ -48,6 +49,7 @@ const CreateTaskForm = () => {
   const onSubmit = (data: CreateTask) => {
     console.log({ ...data, dueDate: data.dueDate.toISOString() });
     dispatch(addTask({ ...data, dueDate: data.dueDate.toISOString() }));
+    toast('Task created successfully! 🚀');
     form.reset();
   };
 
