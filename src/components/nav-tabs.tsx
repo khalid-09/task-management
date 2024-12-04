@@ -10,6 +10,14 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from './ui/button';
 import { Filter, SlidersVerticalIcon, Terminal } from 'lucide-react';
@@ -20,6 +28,7 @@ import { updateTaskStatus } from '@/store/taskSlice';
 
 const NavTabs = () => {
   const [showOverdue, setShowOverdue] = useState(false);
+  const [sortBy, setSortBy] = useState<string | null>(null);
   const tasks = useSelector((state: RootState) => state.tasks);
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get('search') || '';
@@ -46,11 +55,25 @@ const NavTabs = () => {
 
   const tasksToDisplay = showOverdue ? overdueTasks : filteredTasks;
 
-  const tasksToDo = tasksToDisplay.filter(task => task.status === 'todo');
-  const tasksInProgress = tasksToDisplay.filter(
+  const sortedTasks = [...tasksToDisplay].sort((a, b) => {
+    if (sortBy === 'dueDate') {
+      return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+    }
+    if (sortBy === 'priority') {
+      const priorityOrder = { high: 1, medium: 2, low: 3 };
+      return priorityOrder[a.priority] - priorityOrder[b.priority];
+    }
+    if (sortBy === 'title') {
+      return a.title.localeCompare(b.title);
+    }
+    return 0;
+  });
+
+  const tasksToDo = sortedTasks.filter(task => task.status === 'todo');
+  const tasksInProgress = sortedTasks.filter(
     task => task.status === 'in-progress'
   );
-  const tasksDone = tasksToDisplay.filter(task => task.status === 'done');
+  const tasksDone = sortedTasks.filter(task => task.status === 'done');
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id as string);
@@ -101,22 +124,41 @@ const NavTabs = () => {
               />
               <span className="">Show Overdue Tasks</span>
             </Button>
-            <Button variant="outline">
-              <Filter
-                className="opacity-60"
-                size={16}
-                strokeWidth={2}
-                aria-hidden="true"
-              />
-              <span className="md:block hidden">Sort By</span>
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline">
+                  <Filter
+                    className="opacity-60"
+                    size={16}
+                    strokeWidth={2}
+                    aria-hidden="true"
+                  />
+                  <span className="md:block hidden">Sort By</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => setSortBy('dueDate')}>
+                  Due Date
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy('priority')}>
+                  Priority
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy('title')}>
+                  Title
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => setSortBy(null)}>
+                  Clear Sorting
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
         <TabsContent
           value="all-tasks"
           className="flex flex-col md:flex-row items-start gap-3"
         >
-          {tasksToDisplay.length === 0 ? (
+          {sortedTasks.length === 0 ? (
             <Alert className="mt-4 md:w-1/2 w-full">
               <Terminal className="h-4 w-4" />
               <AlertTitle className="text-xl font-medium">
