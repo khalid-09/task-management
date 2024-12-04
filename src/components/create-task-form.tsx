@@ -222,10 +222,12 @@ const CreateTaskForm = () => {
               Cancel
             </Button>
           </DialogClose>
-          <Button type="submit">
-            Create Task
-            <FilePlus2 />
-          </Button>
+          <DialogClose asChild>
+            <Button type="submit">
+              Create Task
+              <FilePlus2 />
+            </Button>
+          </DialogClose>
         </div>
       </form>
     </Form>

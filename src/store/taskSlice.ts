@@ -11,8 +11,8 @@ const initialState: Task[] = [
   {
     id: '1',
     title: 'Learn Communication',
-    description: 'Practice communication for Accenture Interview.',
-    dueDate: '2024-12-03T18:30:00.000Z', // Overdue (for example, it's past the current date)
+    description: 'Practice communication skills for Interview.',
+    dueDate: '2024-12-03T18:30:00.000Z',
     priority: 'high',
     status: 'todo',
   },
