@@ -20,7 +20,14 @@ import {
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from './ui/button';
-import { Filter, SlidersVerticalIcon, Terminal } from 'lucide-react';
+import {
+  Filter,
+  SlidersVerticalIcon,
+  Terminal,
+  Calendar,
+  Tag,
+  FileText,
+} from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Task from './task';
 import { RootState } from '@/store';
@@ -70,10 +77,10 @@ const NavTabs = () => {
   });
 
   const tasksToDo = sortedTasks.filter(task => task.status === 'todo');
+  const tasksDone = sortedTasks.filter(task => task.status === 'done');
   const tasksInProgress = sortedTasks.filter(
     task => task.status === 'in-progress'
   );
-  const tasksDone = sortedTasks.filter(task => task.status === 'done');
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id as string);
@@ -137,17 +144,33 @@ const NavTabs = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => setSortBy('dueDate')}>
+                <DropdownMenuItem
+                  className="flex cursor-pointer items-center gap-3"
+                  onClick={() => setSortBy('dueDate')}
+                >
+                  <Calendar className="mr-2" size={16} strokeWidth={2} />
                   Due Date
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSortBy('priority')}>
+                <DropdownMenuItem
+                  className="flex cursor-pointer items-center gap-3"
+                  onClick={() => setSortBy('priority')}
+                >
+                  <Tag className="mr-2" size={16} strokeWidth={2} />
                   Priority
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSortBy('title')}>
+                <DropdownMenuItem
+                  className="flex cursor-pointer items-center gap-3"
+                  onClick={() => setSortBy('title')}
+                >
+                  <FileText className="mr-2" size={16} strokeWidth={2} />
                   Title
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => setSortBy(null)}>
+                <DropdownMenuItem
+                  className="flex cursor-pointer items-center gap-3"
+                  onClick={() => setSortBy(null)}
+                >
+                  <Filter className="mr-2" size={16} strokeWidth={2} />
                   Clear Sorting
                 </DropdownMenuItem>
               </DropdownMenuContent>

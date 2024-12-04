@@ -7,6 +7,7 @@ import TaskAction from './task-actions';
 import { Separator } from './ui/separator';
 import { format } from 'date-fns';
 import { Calendar } from 'lucide-react';
+import { motion } from 'motion/react';
 
 interface TaskCardProps {
   cardTitle: 'To Do' | 'In-Progress' | 'Completed';
@@ -42,12 +43,22 @@ const DraggableTaskCard = ({
     : undefined;
 
   return (
-    <div
+    <motion.div
       ref={setNodeRef}
       style={style}
       className={cn(isDragging ? 'opacity-50' : '')}
       {...listeners}
       {...attributes}
+      initial={{ opacity: 0, scale: 0.9, y: 20 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.9, y: -20 }}
+      transition={{
+        type: 'tween',
+        stiffness: 300,
+        damping: 25,
+        duration: 0.6,
+        ease: 'easeOut',
+      }}
     >
       <Card className="transition hover:scale-[101%]">
         <CardContent className="p-3 space-y-2">
@@ -91,7 +102,7 @@ const DraggableTaskCard = ({
           </div>
         </div>
       </Card>
-    </div>
+    </motion.div>
   );
 };
 
