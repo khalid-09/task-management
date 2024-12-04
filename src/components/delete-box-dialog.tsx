@@ -10,6 +10,7 @@ import {
 import { AppDispatch } from '@/store';
 import { deleteTask } from '@/store/taskSlice';
 import { DialogClose } from '@radix-ui/react-dialog';
+import { MouseEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'sonner';
 
@@ -27,7 +28,8 @@ const DeleteTaskDialog = ({ id, open, onClose }: DeleteTaskDialogProps) => {
     onClose();
   };
 
-  const handleDelete = () => {
+  const handleDelete = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
     dispatch(deleteTask(id));
     toast('Task deleted successfully! 🗑️');
   };

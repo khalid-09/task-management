@@ -15,7 +15,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import DeleteBoxDialog from './delete-box-dialog';
-import { useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store';
 import { markComplete, Task } from '@/store/taskSlice';
@@ -29,9 +29,15 @@ const TaskAction = ({ task: { id, status } }: TaskActionProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-  const handleMarkComplete = () => {
+  const handleMarkComplete = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
     dispatch(markComplete(id));
     toast('Task marked as complete! ✅');
+  };
+
+  const handleDelete = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    setShowDeleteDialog(true);
   };
 
   return (
@@ -42,34 +48,35 @@ const TaskAction = ({ task: { id, status } }: TaskActionProps) => {
             <EllipsisVerticalIcon size={16} />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="">
+        <DropdownMenuContent>
           <DropdownMenuLabel>Task Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             {status !== 'done' && (
               <DropdownMenuItem
-                className="flex cursor-pointer  items-center gap-3"
+                className="flex cursor-pointer items-center gap-3"
                 onClick={handleMarkComplete}
               >
                 <CheckCircle2 className="size-4" />
                 Mark as Complete
               </DropdownMenuItem>
             )}
-            <DropdownMenuItem className="flex cursor-pointer  items-center gap-3">
+            <DropdownMenuItem className="flex cursor-pointer items-center gap-3">
               <PenIcon className="size-4" />
               Edit
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            onClick={() => setShowDeleteDialog(true)}
-            className="flex cursor-pointer  items-center gap-3"
+            onClick={handleDelete}
+            className="flex cursor-pointer items-center gap-3"
           >
             <Trash2 className="size-4" />
             Delete Task
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
       <DeleteBoxDialog
         id={id}
         open={showDeleteDialog}
