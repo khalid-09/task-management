@@ -2,11 +2,8 @@ import {
   Calendar,
   CheckCircle2Icon,
   Home,
-  Inbox,
   MailIcon,
   MinusCircleIcon,
-  Search,
-  Settings,
 } from 'lucide-react';
 
 import {
