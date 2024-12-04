@@ -1,3 +1,4 @@
+import { useDroppable } from '@dnd-kit/core';
 import { Task as TaskType } from '@/store/taskSlice';
 import { Card, CardHeader, CardTitle } from './ui/card';
 import {
@@ -16,8 +17,30 @@ interface TaskProps {
 }
 
 const Task = ({ cardTitle, tasks }: TaskProps) => {
+  const getDroppableId = (title: string): string => {
+    switch (title) {
+      case 'To Do':
+        return 'todo';
+      case 'In-Progress':
+        return 'in-progress';
+      case 'Completed':
+        return 'done';
+      default:
+        return '';
+    }
+  };
+
+  const { setNodeRef, isOver } = useDroppable({
+    id: getDroppableId(cardTitle),
+  });
+
   return (
-    <div className="border-dashed shadow-lg rounded-lg p-2 border md:w-1/3 w-full flex flex-col">
+    <div
+      ref={setNodeRef}
+      className={`border-dashed shadow-lg rounded-lg p-2 border md:w-1/3 w-full flex flex-col ${
+        isOver ? 'bg-muted/50' : ''
+      }`}
+    >
       <Card>
         <CardHeader className="p-4">
           <CardTitle className="flex items-center justify-between">
@@ -39,13 +62,15 @@ const Task = ({ cardTitle, tasks }: TaskProps) => {
       </Card>
 
       <ScrollArea className="h-96 md:h-[862px] mt-3">
-        <TaskCard cardTitle={cardTitle} tasks={tasks} />
-        {tasks.length === 0 && (
-          <div className="p-2  flex items-center justify-center md:justify-start gap-2">
-            <LucideSquareDashedMousePointer size={16} />
-            No tasks. Start adding your tasks.
-          </div>
-        )}
+        <div className="space-y-3">
+          <TaskCard cardTitle={cardTitle} tasks={tasks} />
+          {tasks.length === 0 && (
+            <div className="p-2 flex items-center justify-center md:justify-start gap-2">
+              <LucideSquareDashedMousePointer size={16} />
+              No tasks. Start adding your tasks.
+            </div>
+          )}
+        </div>
       </ScrollArea>
     </div>
   );
