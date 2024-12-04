@@ -14,7 +14,7 @@ const DashboardPage = () => {
         </div>
         <NavTabs />
       </div>
-      <div className="md:w-1/3 w-full pl-3 py-3 md:pl-0 pr-3 space-y-3">
+      <div className="md:w-1/3 w-full pl-3 mt-3 md:pl-0 pr-3 space-y-3">
         <TaskPieChart />
         <TaskMetrics />
         <RecentTasks />

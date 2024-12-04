@@ -1,22 +1,17 @@
 import { Task as TaskType } from '@/store/taskSlice';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Card, CardHeader, CardTitle } from './ui/card';
 import {
-  Calendar,
   CheckCircle2,
   Circle,
   CircleDashed,
   LucideSquareDashedMousePointer,
 } from 'lucide-react';
 import { Badge } from './ui/badge';
-import { Separator } from './ui/separator';
-import { format } from 'date-fns';
-import TaskAction from './task-actions';
-import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Link } from 'react-router-dom';
+import TaskCard from './task-card';
 
 interface TaskProps {
-  cardTitle: 'To Do' | 'In-Progress' | 'Done';
+  cardTitle: 'To Do' | 'In-Progress' | 'Completed';
   tasks: TaskType[];
 }
 
@@ -33,7 +28,7 @@ const Task = ({ cardTitle, tasks }: TaskProps) => {
               {cardTitle === 'In-Progress' && (
                 <CircleDashed className="text-orange-500" size={14} />
               )}
-              {cardTitle === 'Done' && (
+              {cardTitle === 'Completed' && (
                 <CheckCircle2 className="text-green-500" size={14} />
               )}
               {cardTitle}
@@ -43,62 +38,10 @@ const Task = ({ cardTitle, tasks }: TaskProps) => {
         </CardHeader>
       </Card>
 
-      <ScrollArea className="h-96 md:h-[730px] mt-3">
-        <div className="px-1">
-          {tasks.map(task => (
-            <Link to={`/dashboard/task/edit/${task.id}`}>
-              <Card
-                className="mb-3 transition hover:scale-[101%]"
-                key={task.id}
-              >
-                <CardContent className="p-3 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Badge
-                      className={cn(
-                        'text-xs capitalize bg-blue-100 text-blue-500',
-                        task.priority === 'medium' &&
-                          'bg-orange-100 text-orange-500',
-                        task.priority === 'high' && 'bg-red-100 text-red-500'
-                      )}
-                    >
-                      {task.priority}
-                    </Badge>
-                    <TaskAction task={task} />
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="text-lg font-semibold">{task.title}</h3>
-                    <p className="text-sm line-clamp-2">{task.description}</p>
-                  </div>
-                </CardContent>
-                <Separator />
-                <div className="p-3 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Calendar size={16} />
-                    {cardTitle !== 'Done' && (
-                      <p className="text-sm">
-                        Due on:{' '}
-                        <span className="font-semibold">
-                          {format(new Date(task.dueDate), 'dd MMM')}
-                        </span>
-                      </p>
-                    )}
-                    {cardTitle === 'Done' && (
-                      <p className="text-sm">
-                        Completed on:{' '}
-                        <span className="font-semibold">
-                          {format(new Date(task.dueDate), 'dd MMM')}
-                        </span>
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </Card>
-            </Link>
-          ))}
-        </div>
-
+      <ScrollArea className="h-96 md:h-[862px] mt-3">
+        <TaskCard cardTitle={cardTitle} tasks={tasks} />
         {tasks.length === 0 && (
-          <div className="p-2 flex items-center gap-2">
+          <div className="p-2  flex items-center justify-center md:justify-start gap-2">
             <LucideSquareDashedMousePointer size={16} />
             No tasks. Start adding your tasks.
           </div>

@@ -13,9 +13,12 @@ export default function RecentTasks() {
         <CardTitle>Recent Tasks</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
+        <div className="space-y-4 divide-y-2">
           {tasks.slice(0, 5).map(task => (
-            <div key={task.id} className="flex items-center justify-between">
+            <div
+              key={task.id}
+              className="flex pt-2 items-center justify-between"
+            >
               <div className="space-y-1">
                 <p className="text-sm font-medium">{task.title}</p>
                 <div className="flex items-center gap-2">
@@ -27,6 +30,7 @@ export default function RecentTasks() {
                         ? 'default'
                         : 'secondary'
                     }
+                    className="capitalize"
                   >
                     {task.priority}
                   </Badge>
@@ -35,7 +39,10 @@ export default function RecentTasks() {
                   </span>
                 </div>
               </div>
-              <Badge variant={task.status === 'done' ? 'default' : 'outline'}>
+              <Badge
+                className="capitalize"
+                variant={task.status === 'done' ? 'default' : 'outline'}
+              >
                 {task.status}
               </Badge>
             </div>
