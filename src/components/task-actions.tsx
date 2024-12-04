@@ -15,29 +15,24 @@ import {
   Trash2,
 } from 'lucide-react';
 import DeleteBoxDialog from './delete-box-dialog';
-import { MouseEvent, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store';
 import { markComplete, Task } from '@/store/taskSlice';
 import { toast } from 'sonner';
+import { Link } from 'react-router-dom';
 
 interface TaskActionProps {
   task: Task;
 }
 
-const TaskAction = ({ task: { id, status } }: TaskActionProps) => {
+const TaskAction = ({ task }: TaskActionProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-  const handleMarkComplete = (e: MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    dispatch(markComplete(id));
-    toast('Task marked as complete! ✅');
-  };
-
-  const handleDelete = (e: MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    setShowDeleteDialog(true);
+  const handleMarkComplete = () => {
+    dispatch(markComplete(task.id));
+    toast.success('Task marked as complete! ✅');
   };
 
   return (
@@ -61,14 +56,16 @@ const TaskAction = ({ task: { id, status } }: TaskActionProps) => {
                 Mark as Complete
               </DropdownMenuItem>
             )}
-            <DropdownMenuItem className="flex cursor-pointer items-center gap-3">
-              <PenIcon className="size-4" />
-              Edit
-            </DropdownMenuItem>
+            <Link state={task} to={`/dashboard/task/edit/${task.id}`}>
+              <DropdownMenuItem className="flex cursor-pointer items-center gap-3">
+                <PenIcon className="size-4" />
+                Edit Task
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            onClick={handleDelete}
+            onClick={() => setShowDeleteDialog(true)}
             className="flex cursor-pointer items-center gap-3"
           >
             <Trash2 className="size-4" />
@@ -78,7 +75,7 @@ const TaskAction = ({ task: { id, status } }: TaskActionProps) => {
       </DropdownMenu>
 
       <DeleteBoxDialog
-        id={id}
+        id={task.id}
         open={showDeleteDialog}
         onClose={() => setShowDeleteDialog(false)}
       />

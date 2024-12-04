@@ -30,32 +30,54 @@ import { Calendar } from './ui/calendar';
 import { Textarea } from './ui/textarea';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store';
-import { addTask } from '@/store/taskSlice';
+import { addTask, editTask, Task } from '@/store/taskSlice';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
-const CreateTaskForm = () => {
+interface CreateTaskFormProps {
+  task?: Task;
+  type: 'create' | 'edit';
+}
+
+const CreateTaskForm = ({ type, task }: CreateTaskFormProps) => {
+  const navigate = useNavigate();
   const form = useForm<CreateTask>({
     resolver: zodResolver(createTaskSchema),
     defaultValues: {
-      title: '',
-      description: '',
-      priority: undefined,
-      status: undefined,
+      title: task?.title || '',
+      description: task?.description || '',
+      priority: task?.priority || undefined,
+      status: task?.status || undefined,
+      dueDate: task?.dueDate ? new Date(task.dueDate) : undefined,
     },
   });
 
   const dispatch = useDispatch<AppDispatch>();
 
   const onSubmit = (data: CreateTask) => {
-    console.log({ ...data, dueDate: data.dueDate.toISOString() });
-    dispatch(addTask({ ...data, dueDate: data.dueDate.toISOString() }));
-    toast('Task created successfully! 🚀');
+    if (type === 'edit' && task) {
+      dispatch(
+        editTask({
+          ...data,
+          dueDate: data.dueDate.toISOString(),
+          id: task.id,
+        })
+      );
+      toast.success('Task updated successfully! 🚀');
+      navigate('/dashboard');
+    } else {
+      dispatch(addTask({ ...data, dueDate: data.dueDate.toISOString() }));
+      toast.success('Task created successfully! 🚀');
+    }
     form.reset();
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-4 shadow-md border p-6 rounded-lg"
+      >
         <FormField
           control={form.control}
           name="title"
@@ -83,7 +105,7 @@ const CreateTaskForm = () => {
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-40">
                       <SelectValue className="px-2" placeholder="Status" />
                     </SelectTrigger>
                   </FormControl>
@@ -125,8 +147,8 @@ const CreateTaskForm = () => {
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue className="px-2" placeholder="Priority" />
+                    <SelectTrigger className="w-32">
+                      <SelectValue placeholder="Priority" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -216,18 +238,38 @@ const CreateTaskForm = () => {
           )}
         />
         <div className="w-full pt-4 flex items-center justify-between">
-          <DialogClose asChild>
-            <Button variant="secondary">
-              <ChevronLeft />
-              Cancel
-            </Button>
-          </DialogClose>
-          <DialogClose asChild>
-            <Button type="submit">
-              Create Task
-              <FilePlus2 />
-            </Button>
-          </DialogClose>
+          {type === 'create' && (
+            <>
+              <DialogClose asChild>
+                <Button variant="secondary">
+                  <ChevronLeft />
+                  Cancel
+                </Button>
+              </DialogClose>
+              <DialogClose asChild>
+                <Button type="submit">
+                  Create Task
+                  <FilePlus2 />
+                </Button>
+              </DialogClose>
+            </>
+          )}
+          {type === 'edit' && (
+            <>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => navigate(-1)}
+              >
+                <ChevronLeft />
+                Back
+              </Button>
+              <Button type="submit">
+                Edit Task
+                <FilePlus2 />
+              </Button>
+            </>
+          )}
         </div>
       </form>
     </Form>

@@ -35,7 +35,7 @@ const CreateTask = () => {
                 Fill in the details to create a new task.
               </DialogDescription>
             </DialogHeader>
-            <CreateTaskForm />
+            <CreateTaskForm type="create" />
           </DialogContent>
         </Dialog>
       </div>
@@ -51,7 +51,7 @@ const CreateTask = () => {
                 Fill in the details to create a new task.
               </DrawerDescription>
             </DrawerHeader>
-            <CreateTaskForm />
+            <CreateTaskForm type="create" />
           </DrawerContent>
         </Drawer>
       </div>

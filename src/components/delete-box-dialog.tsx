@@ -29,7 +29,7 @@ const DeleteTaskDialog = ({ id, open, onClose }: DeleteTaskDialogProps) => {
 
   const handleDelete = () => {
     dispatch(deleteTask(id));
-    toast('Task deleted successfully! 🗑️');
+    toast.success('Task deleted successfully! 🗑️');
   };
 
   return (
