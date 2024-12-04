@@ -46,7 +46,7 @@ const CreateTaskForm = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const onSubmit = (data: CreateTask) => {
-    console.log(data);
+    console.log({ ...data, dueDate: data.dueDate.toISOString() });
     dispatch(addTask({ ...data, dueDate: data.dueDate.toISOString() }));
     form.reset();
   };

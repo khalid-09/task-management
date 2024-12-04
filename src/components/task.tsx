@@ -5,13 +5,13 @@ import {
   CheckCircle2,
   Circle,
   CircleDashed,
-  EllipsisVerticalIcon,
   LucideSquareDashedMousePointer,
 } from 'lucide-react';
 import { Badge } from './ui/badge';
-import { Button } from './ui/button';
 import { Separator } from './ui/separator';
 import { format } from 'date-fns';
+import TaskAction from './task-actions';
+import { cn } from '@/lib/utils';
 
 interface TaskProps {
   cardTitle: 'To Do' | 'In-Progress' | 'Done';
@@ -44,12 +44,16 @@ const Task = ({ cardTitle, tasks }: TaskProps) => {
         <Card className="shadow-lg" key={task.id}>
           <CardContent className="p-3 space-y-2">
             <div className="flex items-center justify-between">
-              <Badge className="text-xs capitalize bg-orange-400 ">
+              <Badge
+                className={cn(
+                  'text-xs capitalize bg-blue-100 text-blue-500',
+                  task.priority === 'medium' && 'bg-orange-100 text-orange-500',
+                  task.priority === 'high' && 'bg-red-100 text-red-500'
+                )}
+              >
                 {task.priority}
               </Badge>
-              <Button size="sm" variant="ghost">
-                <EllipsisVerticalIcon size={16} />
-              </Button>
+              <TaskAction id={task.id} />
             </div>
             <div className="space-y-1">
               <h3 className="text-lg font-semibold">{task.title}</h3>
