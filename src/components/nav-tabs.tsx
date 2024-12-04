@@ -13,7 +13,7 @@ const NavTabs = () => {
   const tasksDone = tasks.filter(task => task.status === 'done');
 
   return (
-    <section className="flex p-3 md:w-2/3 w-full items-start justify-between">
+    <section className="flex py-3 w-full items-start justify-between">
       <Tabs defaultValue="kanban" className="w-full">
         <div className="flex items-center justify-between">
           <TabsList>

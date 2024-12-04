@@ -38,9 +38,7 @@ const TaskAction = ({ task: { id, status } }: TaskActionProps) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="">
-          <DropdownMenuLabel className="text-center">
-            Task Actions
-          </DropdownMenuLabel>
+          <DropdownMenuLabel>Task Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             {status !== 'done' && (
@@ -48,12 +46,12 @@ const TaskAction = ({ task: { id, status } }: TaskActionProps) => {
                 className="flex cursor-pointer  items-center gap-3"
                 onClick={() => dispatch(markComplete(id))}
               >
-                <CheckCircle2 />
+                <CheckCircle2 className="size-4" />
                 Mark as Complete
               </DropdownMenuItem>
             )}
             <DropdownMenuItem className="flex cursor-pointer  items-center gap-3">
-              <PenIcon />
+              <PenIcon className="size-4" />
               Edit
             </DropdownMenuItem>
           </DropdownMenuGroup>
