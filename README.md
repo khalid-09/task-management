@@ -18,7 +18,7 @@ A Task management UI dashboard.
 
 3. **Dashboard UI**
 
-   - Responsive and beautiful UI including interactive tasks and charts.
+   - Responsive and beautiful UI including interactive tasks, animations and charts.
 
 4. **Tasks action**
 
