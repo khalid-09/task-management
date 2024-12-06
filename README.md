@@ -4,6 +4,26 @@ https://task-management-zcqc.vercel.app/dashboard
 
 A Task management UI dashboard.
 
+## Features
+
+1. **Task drag and drop**
+
+   - Drag and drop task cards to change task progress.
+
+2. **Filtering and Sorting**
+
+   - Filter and Sort tasks according to due Date, Title, Priority.
+
+   - Search for tasks using title
+
+3. **Dashboard UI**
+
+   - Responsive and beautiful UI including interactive tasks and charts.
+
+4. **Tasks action**
+
+   - Create, Edit, Update, Delete your tasks seamlessly.
+
 ## Getting Started
 
 ### Prerequisites
